@@ -1,0 +1,171 @@
+{
+    /*
+      From: http://cocoadev.com/wiki/KeyBindings
+
+      Modifiers:
+          ^ : Ctrl
+          $ : Shift
+          ~ : Option (Alt)
+          @ : Command (Apple)
+          # : Numeric Keypad
+
+      Keycode formats:
+          \NNN   = Octal
+          \UXXXX = Hex
+
+      Printing characters (including space) can be specified by 
+          using the character itself.
+
+      Keycodes for non-printing keys:
+          These are equal to the ASCII codes:
+          Backspace:  \U0008
+          Tab:        \U0009
+          Escape:     \U001B
+          Enter:      \U000A (newline) or \U000D (cr)?
+          Other non-printing keys are represented by "unicodes" 0xF700-0xF8FF.  The
+          complete list can be found in the NSEvent.h header file.  The availability of 
+          various keys will be system-dependent.
+          Up Arrow:   \UF700
+          Down Arrow: \UF701
+          Left Arrow: \UF702
+          Right Arrow:\UF703
+          F1:         \UF704
+          F2:         \UF705
+          F3:         \UF706
+          ...
+          F12:        \UF70F
+          ...
+          F35:        \UF726
+          Insert:     \UF727
+          Delete:     \UF728  (also ASCII code \177)
+          Home:       \UF729
+          End:        \UF72B
+          Page Up:    \UF72C
+          Page Down:  \UF72D
+          Print Screen: \UF72E
+          Scroll Lock:  \UF72F
+          Pause:        \UF730
+          SysReq:       \UF731
+          Break:        \UF732
+          Menu:         \UF735
+          Help:         \UF746
+      Sub-structure syntax:
+          Nested dictionary (for multi-key bindings like ^X^S):  
+              { key1 = val1; key2 = val2; ... }
+          Nested array (for binding to a sequence of commands (??)):
+              ( elt1, elt2, ... )
+      The commands (like "pageUp:" and "moveToEndOfLine:") are Action methods
+      of the NSResponder class.
+    */
+
+    /* Meta shortcuts */
+    "~p" = "selectParagraph:";
+    "~w" = ("deleteToMark:", "yank:");
+
+    "~f"        = "moveWordForward:";               /* M-f          Move forward word */
+    "~b"        = "moveWordBackward:";              /* M-b          Move backward word */
+    "~<"        = "moveToBeginningOfDocument:";     /* M-<          Move to beginning of document */
+    "~>"        = "moveToEndOfDocument:";           /* M->          Move to end of document */
+    "~v"        = "pageUp:";                        /* M-v          Page Up */
+    "~/"        = "complete:";                      /* M-/          Complete */
+    "~c"        = ( "capitalizeWord:",              /* M-c          Capitalize */
+                    "moveForward:",
+                    "moveForward:");                                
+    "~u"        = ( "uppercaseWord:",               /* M-u          Uppercase */
+                    "moveForward:",
+                    "moveForward:");
+    "~l"        = ( "lowercaseWord:",               /* M-l          Lowercase */
+                    "moveForward:",
+                    "moveForward:");
+    "~d"        = "deleteWordForward:";             /* M-d          Delete word forward */
+    "^~h"       = "deleteWordBackward:";            /* M-C-h        Delete word backward */
+    "~\U007F"   = "deleteWordBackward:";            /* M-Bksp       Delete word backward */
+    "~t"        = "transposeWords:";                /* M-t          Transpose words */
+    "~\@"       = ( "setMark:",                     /* M-@          Mark word */
+                    "moveWordForward:",
+                    "swapWithMark");
+    "~h"        = ( "setMark:",                     /* M-h          Mark paragraph */
+                    "moveToEndOfParagraph:",
+                    "swapWithMark");
+
+    /* ---- */
+
+    /* Override symbols so other apps can bind */
+    "~j" = "noop:";
+    "~i" = "insertTab:";
+
+    /* Additional Emacs bindings */
+
+    "~\UF728"	= "deleteWordForward:";		/* delete */
+    "@\UF729"	= "moveToBeginningOfParagraph:";/* A-home */
+    "@\UF72B"	= "moveToEndOfParagraph:";	/* A-end */
+    "@\UF700"	= "moveToBeginningOfDocument:"; /* A-up */
+    "@\UF701"	= "moveToEndOfDocument:";	/* A-down */
+    
+    "\UF729" = "moveToBeginningOfDocument:";  /* Home */
+    "\UF72B" = "moveToEndOfDocument:";  /* End */
+    "@\UF729" = "moveToBeginningOfParagraph:";  /* Cmd-Home */
+    "@\UF72B" = "moveToEndOfParagraph:";  /* Cmd-End */
+    "@\UF700" = "moveToBeginningOfDocument:"; /* Command-Up arrow */
+    "@\UF701" = "moveToEndOfDocument:"; /* Command-Down arrow */
+    "^\UF700" = "pageUp:"; /* Control-Up arrow */
+    "^\UF701" = "pageDown:"; /* Control-Down arrow */
+    "\UF72C" = "pageUp:"; /* Page-up */
+    "\UF72D" = "pageDown:"; /* Page-down */
+
+    /* Mark-point stuff (Emacs-style mark and point bindings are implemented 
+       but not bound by default.  In the text system the mark and point are ranges, 
+       not just locations.  The "point" is the selected range.) */
+
+    "^s" = ("swapWithMark:", "centerSelectionInVisibleArea:");
+    /* "^w" = "deleteToMark:"; */
+    "^w" = "deleteWordBackward:";
+    "^\@"       = "setMark:";                       /* C-@          Set mark */    
+    "^ " = "setMark:";
+
+    /* Ctrl shortcuts */
+    "^l"        = "centerSelectionInVisibleArea:";  /* C-l          Recenter */
+    "^_"        = "undo:";                          /* C-_          Undo */
+
+    "^v" = "pageDown:";
+    "^/" = "undo:";
+    "^j" = "insertNewline:";
+    "^y" = "yank:";
+    "^g" = ("setMark:", "selectToMark:");
+
+    "^u" = {
+        "^x" = {
+          "u" = "redo:";
+        };
+    };
+
+    "~^h"="deleteWordBackward:";
+    "~\010"="deleteWordBackward:"; /* Alt-backspace */
+    "~\177"="deleteWordBackward:"; /* Alt-delete */
+
+    "^t"	= "transpose:";			/* C-t */
+    "^g"	= "_cancelKey:";		/* F5 */
+    "^a"        = "moveToBeginningOfLine:";     /* C-a */           
+    "^e"        = "moveToEndOfLine:";           /* C-e */   
+
+    "^x" = {
+        "u"  = "undo:";          /* C-x u    =>  undo */
+        /* "^s" = "save:"; */    /* C-x C-s  =>  save */
+        "^x" = ("swapWithMark:", "centerSelectionInVisibleArea:");
+        "^m" = "selectToMark:";
+        /* --- */
+        "k"     = "performClose:";                  /* C-x k        Close */
+        "^f"    = "openDocument:";                  /* C-x C-f      Open (find file) */
+        "^s"    = "save:";                  /* C-x C-s      Save */
+        "^w"    = "saveAs:";                /* C-x C-w      Save as */ 
+   };
+
+   /* for selectors see:
+
+      https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/ApplicationKit/Classes/NSResponder_Class/Reference/Reference.html
+      http://www.cocoabits.com/KeyBindingsEditor/Manual/index.html
+      http://www.hcs.harvard.edu/~jrus/Site/selectors.html   
+
+   */
+}
+
